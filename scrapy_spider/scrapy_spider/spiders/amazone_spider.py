@@ -18,7 +18,7 @@ class QuotesSpiderSpider(scrapy.Spider):
             path = nextpage.extract_first()
             nextpage = response.urljoin(path)
             yield scrapy.Request(nextpage, callback=self.parse)
-        
+    
     def scrape(self, response):
         t = response.xpath("//span[@class='a-size-medium a-color-base a-text-normal']/text()").extract()
         r= response.xpath("//span[@class='a-icon-alt']/text()").extract()
@@ -37,10 +37,16 @@ class QuotesSpiderSpider(scrapy.Spider):
             res = "https://www.amazon.com/"+i[4]
             asin=re.findall(r"(?<=dp/)[A-Z0-9]{10}",res)[0]
             item['_id']=asin
-            yield item
+            yield scrapy.Request(res, callback=self.parse_price, meta={'item':item})
+            
 # =============================================================================
 #         next_page = response.xpath("//li[@class='a-last']//a//@href").extract()
 #         if next_page:
 #             url = response.urljoin(next_page[0].extract())
 #             yield scrapy.Request(url, self.parse)
 # =============================================================================
+    def parse_price(self, response):
+            nbrating = response.xpath("//*[@id='acrCustomerReviewText']/text()").extract_first()
+            item = response.meta['item']
+            item['nbrating'] = nbrating
+            yield item

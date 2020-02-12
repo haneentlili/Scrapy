@@ -26,5 +26,5 @@ class MongoDBPipline(object):
         self.client.close()
         
     def process_item(self, item, spider):
-        self.db[self.collection_name].update_one({'_id': dict(item)['_id']}, {"$set":{'price':dict(item)['price'],'rating':dict(item)['rating'],'image':dict(item)['image'],'title':dict(item)['title']}}, upsert=True)
+        self.db[self.collection_name].update_one({'_id': dict(item)['_id']}, {"$set":{'price':dict(item)['price'],'rating':dict(item)['rating'],'image':dict(item)['image'],'title':dict(item)['title'],'nbrating':dict(item)['nbrating']}}, upsert=True)
 

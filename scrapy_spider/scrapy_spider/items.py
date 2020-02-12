@@ -5,6 +5,7 @@ class ScrapySpiderItem(scrapy.Item):
     rating = scrapy.Field()
     image = scrapy.Field()
     title = scrapy.Field()
+    nbrating = scrapy.Field()
 
     
     
